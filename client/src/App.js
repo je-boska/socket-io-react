@@ -1,29 +1,19 @@
 import './App.css'
-import React, { useState, useEffect } from 'react'
-import socketIoClient from 'socket.io-client'
-import moment from 'moment'
-
-const ENDPOINT = 'http://127.0.0.1:4001'
+import React, { useState } from 'react'
+import ClientComponent from './components/ClientComponent'
 
 function App() {
-  const [response, setResponse] = useState('')
-
-  useEffect(() => {
-    const socket = socketIoClient(ENDPOINT)
-    socket.on('FromAPI', data => {
-      setResponse(data)
-    })
-  }, [])
+  const [loadClient, setLoadClient] = useState(true)
 
   return (
-    <div className='App'>
-      <p>
-        It's{' '}
-        <time dateTime={response}>
-          {moment(response).format('MMMM Do YYYY, h:mm:ss a')}
-        </time>
-      </p>
-    </div>
+    <>
+      <div className='App'>
+        <button onClick={() => setLoadClient(prevState => !prevState)}>
+          {loadClient ? 'STOP CLIENT' : 'START CLIENT'}
+        </button>
+        {loadClient ? <ClientComponent /> : null}
+      </div>
+    </>
   )
 }
 
